@@ -53,7 +53,7 @@ function wc_gateway_bitcoinus_init(){
       $this->pid = $this->get_option('pid');
       $this->key = $this->get_option('key');
       $this->test = $this->get_option('test')=='yes' ? 1 : 0;
-      $show_items = $this->get_option('items') === 1;
+      $this->items = $this->get_option('items') === 1;
       add_action('woocommerce_api_wc_gateway_bitcoinus',array($this, 'check_callback_request'));
       add_action('woocommerce_update_options_payment_gateways_bitcoinus',[ $this,'process_admin_options' ]);
     }
@@ -109,6 +109,11 @@ function wc_gateway_bitcoinus_init(){
         'test' => $this->test
       ]);
 
+      // create items array
+      if ($this->items) {
+        $items = [];
+      }
+
       // create request body
       $body = [
         'data' => base64_encode($data),
@@ -121,7 +126,7 @@ function wc_gateway_bitcoinus_init(){
         'redirect' => add_query_arg([
           'data' => base64_encode($data),
           'signature' => hash_hmac('sha256',$data,$this->key)
-          ],'https://pts.bitcoinus.io/init')
+          ],'https://pay.bitcoinus.io/init')
       );
 
     }
