@@ -53,7 +53,7 @@ function wc_gateway_bitcoinus_init(){
       $this->pid = $this->get_option('pid');
       $this->key = $this->get_option('key');
       $this->test = $this->get_option('test')=='yes' ? 1 : 0;
-      $this->items = $this->get_option('items') === 1;
+      $this->items = $this->get_option('items')=='yes' ? 1 : 0;
       add_action('woocommerce_api_wc_gateway_bitcoinus',array($this, 'check_callback_request'));
       add_action('woocommerce_update_options_payment_gateways_bitcoinus',[ $this,'process_admin_options' ]);
     }
@@ -110,8 +110,16 @@ function wc_gateway_bitcoinus_init(){
       ]);
 
       // create items array
-      if ($this->items) {
+      if ($this->items == 1) {
         $items = [];
+        foreach ($order->items as $item) {
+          $item_object = (object)[
+            'title' => $item['name'],
+            'qty' => number_format($item['quantity'],2),
+            'price' => $item['total']
+          ];
+          $items[] = json_encode($item_object);
+        }
       }
 
       // create request body
@@ -119,14 +127,12 @@ function wc_gateway_bitcoinus_init(){
         'data' => base64_encode($data),
         'signature' => hash_hmac('sha256',$data,$this->key)
       ];
+      if (isset($items)) $body['items'] = base64_encode(json_encode($items));
 
       // perform redirect
       return array(
         'result' => 'success',
-        'redirect' => add_query_arg([
-          'data' => base64_encode($data),
-          'signature' => hash_hmac('sha256',$data,$this->key)
-          ],'https://pay.bitcoinus.io/init')
+        'redirect' => add_query_arg($body,'https://pay.bitcoinus.io/init')
       );
 
     }
