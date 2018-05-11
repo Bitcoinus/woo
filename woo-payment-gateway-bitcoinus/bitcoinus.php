@@ -95,6 +95,10 @@ function wc_gateway_bitcoinus_init(){
       $email = $order->data['billing']['email']!='' ? $order->data['billing']['email'] : '';
       $street = $order->data['billing']['address_1']!='' ? $order->data['billing']['address_1'] : '';
 
+      // redirect URLs
+      $redirect = $order->get_checkout_order_received_url();
+      $back = $order->get_cancel_order_url();
+
       // create payment array
       $data = json_encode((object)[
         'pid' => $this->pid,
@@ -104,8 +108,8 @@ function wc_gateway_bitcoinus_init(){
         'name' => $fullname,
         'email' => $email,
         'street' => $street,
-        'redirect' => 'https://test1.co',
-        'back' => 'https://test1.co',
+        'redirect' => $redirect,
+        'back' => $back,
         'test' => $this->test
       ]);
 
