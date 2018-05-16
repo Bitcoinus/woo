@@ -44,6 +44,7 @@ function wc_gateway_bitcoinus_init(){
     // constructor
     public function __construct(){
       $this->title = 'Bitcoinus';
+      $this->description = 'Pay with cryptocurrencies.';
       $this->id = 'bitcoinus';
       $this->has_fields = true;
       $this->method_title = __('Bitcoinus','woo-payment-gateway-bitcoinus');
