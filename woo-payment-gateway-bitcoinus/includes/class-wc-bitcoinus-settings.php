@@ -13,7 +13,6 @@ class Wc_Bitcoinus_Settings extends WC_Payment_Gateway
 
   public function __construct()
   {
-    $this->projectID  = 0;
     $this->formFields = [
       'enabled' => [
         'title'       => __('Payment method on/off', 'woo-payment-gateway-bitcoinus'),
@@ -45,6 +44,40 @@ class Wc_Bitcoinus_Settings extends WC_Payment_Gateway
         'label'       => __('Enabled', 'woo-payment-gateway-bitcoinus'),
         'default'     => 'yes',
         'description' => __('Enable this if you only want to test payment gateway without processing real payments', 'woo-payment-gateway-bitcoinus'),
+      ],
+      'bitsdiscount' => [
+        'title'       => __('BITS discount', 'woo-payment-gateway-bitcoinus'),
+        'type'        => 'select',
+        'description' => __('Discount for BITS payments, %', 'woo-payment-gateway-bitcoinus'),
+        'options'       => [
+          '' => __('No discount', 'woo-payment-gateway-bitcoinus'),
+          1 => '1%',
+          2 => '2%',
+          3 => '3%',
+          4 => '4%',
+          5 => '5%',
+          6 => '6%',
+          7 => '7%',
+          8 => '8%',
+          9 => '9%',
+          10 => '10%',
+          15 => '15%',
+          20 => '20%',
+          25 => '25%',
+          30 => '30%',
+          35 => '35%',
+          40 => '40%',
+          45 => '45%',
+          50 => '50%',
+          55 => '55%',
+          60 => '60%',
+          65 => '65%',
+          70 => '70%',
+          75 => '75%',
+          80 => '80%',
+          85 => '85%',
+          90 => '90%'
+        ]
       ],
     ];
   }

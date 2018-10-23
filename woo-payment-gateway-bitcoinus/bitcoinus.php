@@ -34,6 +34,7 @@ function wc_gateway_bitcoinus_init(){
     protected $pid;
     protected $currency;
     protected $amount;
+    protected $discount;
     protected $name;
     protected $email;
     protected $street;
@@ -53,6 +54,8 @@ function wc_gateway_bitcoinus_init(){
       $this->init_settings();
       $this->pid = $this->get_option('pid');
       $this->key = $this->get_option('key');
+      $bitsdiscount = intval($this->get_option('bitsdiscount'));
+      $this->discount = ($bitsdiscount>0) ? (object)[ 'bits' => $bitsdiscount ] : NULL;
       $this->test = $this->get_option('test')=='yes' ? 1 : 0;
       $this->items = $this->get_option('items')=='yes' ? 1 : 0;
       add_action('woocommerce_api_wc_gateway_bitcoinus',array($this, 'check_callback_request'));
@@ -70,7 +73,7 @@ function wc_gateway_bitcoinus_init(){
       $all_fields = $this->get_form_fields();
       $tabs = $this->generateTabs(array([
         'name' => __('General settings','woo-payment-gateway-bitcoinus'),
-        'slice' => array_slice($all_fields,0,5)
+        'slice' => array_slice($all_fields,0,6)
       ]));
       $this->getPluginSettings()->settingsForm($tabs);
       wp_enqueue_script('custom-backend-script',plugin_dir_url(__FILE__).'assets/js/theme.js',array('jquery'));
@@ -106,6 +109,7 @@ function wc_gateway_bitcoinus_init(){
         'orderid' => "$order_id",
         'currency' => $order->currency,
         'amount' => $order->total,
+        'discount' => $this->discount,
         'name' => $fullname,
         'email' => $email,
         'street' => $street,
